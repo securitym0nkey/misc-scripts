@@ -15,7 +15,7 @@ def process(oui_txt,oui_csv,delimiter,duplicate_delimiter=None):
                 oui = m.group(1)
                 vendorname = m.group(2)
                 if oui in oui_vendormapping:
-                    print('[WARNING] Duplicate for "{0}". Listed for "{2}" and "{1}"'.format(oui,oui_vendormapping[mac],vendorname), file=sys.stderr)
+                    print('[WARNING] Duplicate for "{0}". Listed for "{2}" and "{1}"'.format(oui,oui_vendormapping[oui],vendorname), file=sys.stderr)
                     if duplicate_delimiter:
                         vendorname = oui_vendormapping[oui] + duplicate_delimiter + vendorname
                 oui_vendormapping[oui] = vendorname
