@@ -28,7 +28,7 @@ def process(oui_txt, oui_csv, delimiter, duplicate_delimiter=None):
                     vendorname = oui_vendormapping[oui] + duplicate_delimiter + vendorname
             oui_vendormapping[oui] = vendorname
 
-    cvswriter = csv.writer(oui_csv, quoting=csv.QUOTE_ALL)
+    cvswriter = csv.writer(oui_csv, quoting=csv.QUOTE_ALL, dialect=csv.unix_dialect)
     for oui, vendorname in oui_vendormapping.items():
         cvswriter.writerow((oui.replace('-', delimiter), vendorname))
 
