@@ -9,7 +9,7 @@ import sys
 DUPLICATE_WARNING = '[WARNING] Duplicate for "{0}". Listed for "{2}" and "{1}"'
 OUI_REGEX = re.compile(r'^([0-9A-F]{2}-[0-9A-F]{2}-[0-9A-F]{2})\s+\(hex\)\s+([^\r\n]+)')
 
-def process(oui_txt, oui_csv, delimiter, duplicate_delimiter=None):
+def process(oui_txt, oui_csv, delimiter, duplicate_delimiter=None,lowercase=True):
     """ Reads txt file and writes it to a cvs """
 
     oui_vendormapping = {}
@@ -18,6 +18,9 @@ def process(oui_txt, oui_csv, delimiter, duplicate_delimiter=None):
         match = OUI_REGEX.match(line)
         if match:
             oui = match.group(1)
+            if lowercase:
+                oui = oui.lower()
+
             vendorname = match.group(2)
             if oui in oui_vendormapping:
                 print(DUPLICATE_WARNING.format(oui,
@@ -52,6 +55,9 @@ def main():
                         action='store_const', const='-', default=':',
                         help="Use dash(-) instead of colon(:) as OUI delimiter")
 
+    parser.add_argument('--lower', dest='lowercase',
+                        action='store_true', help="Output ouis in lowercase")
+
     parser.add_argument('--duplicate-delimiter', dest='duplicate_delimiter',
                         action='store', default=None,
                         help=('If specified duplicate listings for one OUI '
@@ -60,7 +66,7 @@ def main():
 
     args = parser.parse_args()
 
-    process(args.infile, args.outfile, args.delimiter, duplicate_delimiter=args.duplicate_delimiter)
+    process(args.infile, args.outfile, args.delimiter, duplicate_delimiter=args.duplicate_delimiter,lowercase=args.lowercase)
 
 if __name__ == '__main__':
     main()
